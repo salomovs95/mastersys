@@ -8,7 +8,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
@@ -37,11 +39,12 @@ public class Student {
   private LocalDateTime registeredAt;
   private LocalDateTime updatedAt;
 
-  @OneToMany(mappedBy="student")
-  private List<Contact> contacts;
+  @OneToOne
+  @JoinColumn(name="address_id")
+  private Address address;
 
   @OneToMany(mappedBy="student")
-  private List<Address> addresses;
+  private List<Contact> contacts;
 
   @PrePersist
   private void prePersist() {

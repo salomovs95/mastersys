@@ -14,8 +14,8 @@ public record StudentResponse (
   LocalDate birthdate,
   String gender,
   LocalDateTime registeredAt,
-  List<ContactResponse> contacts,
-  List<AddressResponse> addresses
+  AddressResponse address,
+  List<ContactResponse> contacts
 ) {
   public static StudentResponse fromEntity(Student s) {
     return new StudentResponse(
@@ -25,8 +25,8 @@ public record StudentResponse (
       s.getBirthdate(),
       s.getGender(),
       s.getRegisteredAt(),
-      s.getContacts().stream().map(c->ContactResponse.fromEntity(c)).collect(Collectors.toList()),
-      s.getAddresses().stream().map(a->AddressResponse.fromEntity(a)).collect(Collectors.toList())
+      AddressResponse.fromEntity(s.getAddress()),
+      s.getContacts().stream().map(c->ContactResponse.fromEntity(c)).collect(Collectors.toList())
     );
   }
 }

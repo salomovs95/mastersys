@@ -1,7 +1,6 @@
 package com.salomovs.mastersys.dto.request;
 
 import com.salomovs.mastersys.domain.Address;
-import com.salomovs.mastersys.domain.Student;
 
 public record AddressRequest (
   String address,
@@ -12,8 +11,8 @@ public record AddressRequest (
   String federalUnity,
   String zipCode
 ) {
-  public Address toEntity(Student student) {
-    Address ad = new Address(null, address, number, neighborhood, complement, city, federalUnity, zipCode, student);
+  public Address toEntity() {
+    Address ad = new Address(null, address, number, neighborhood, complement, city, federalUnity, zipCode);
     return ad;
   }
 }
