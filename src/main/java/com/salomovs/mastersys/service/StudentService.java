@@ -23,18 +23,9 @@ public class StudentService {
   }
 
   public void updateStudent(Long id, StudentRequest req) {
-    Student st = findById(id);
-
-    if (req.birthdate() != null)
-      st.setBirthdate(req.birthdate());
-
-    if (req.gender() != null)
-      st.setGender(req.gender());
-
-    if (req.name() != null)
-      st.setName(req.name());
-
-    studentsRepo.save(st);
+    Student student = findById(id);
+    req.fillUp(student);
+    studentsRepo.save(student);
   }
 
   public Page<StudentResponse> listStudents(Pageable page) {

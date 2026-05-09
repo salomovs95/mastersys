@@ -24,8 +24,4 @@ public class Modality {
 
   private String name;
   private Boolean active = true;
-
-  public Modality(String name) {
-    this.name = name;
-  }
 }

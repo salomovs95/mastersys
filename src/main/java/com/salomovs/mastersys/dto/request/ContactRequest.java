@@ -8,7 +8,15 @@ public record ContactRequest (
   String value
 ) {
   public Contact toEntity(Student student) {
-    Contact ct = new Contact(null, type, value, student);
+    Contact ct = new Contact();
+    ct.setStudent(student);
     return ct;
+  }
+
+  public void fillUp(Contact contact) {
+    if (type != null)
+      contact.setType(type);
+    if (value != null)
+      contact.setValue(value);
   }
 }
