@@ -4,9 +4,15 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.salomovs.mastersys.domain.Attendance;
+import com.salomovs.mastersys.domain.Registration;
 import com.salomovs.mastersys.domain.Student;
+import com.salomovs.mastersys.dto.request.AttendanceRequest;
 import com.salomovs.mastersys.dto.request.StudentRequest;
+import com.salomovs.mastersys.dto.response.AttendanceResponse;
 import com.salomovs.mastersys.dto.response.StudentResponse;
+import com.salomovs.mastersys.repository.AttendanceRepository;
+import com.salomovs.mastersys.repository.RegistrationRepository;
 import com.salomovs.mastersys.repository.StudentRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -16,6 +22,8 @@ import lombok.RequiredArgsConstructor;
 public class StudentService {
 
   private final StudentRepository studentsRepo;
+  private final AttendanceRepository attendanceRepository;
+  private final RegistrationRepository registrationRepo;
 
   public StudentResponse registerStudent(StudentRequest req) {
     Student student = studentsRepo.save(req.toEntity());
@@ -49,4 +57,31 @@ public class StudentService {
     return student;
   }
 
-}        
+
+
+  public AttendanceResponse saveAttendance(Long registrationId, AttendanceRequest req) {
+    Registration registration = registrationRepo.findById(registrationId).orElseThrow(
+      ()-> new RuntimeException("No such entity")
+    );
+    Attendance attendance = attendanceRepository.save(req.toEntity(registration));
+    return AttendanceResponse.fromEntity(attendance);
+  }
+
+  public Page<AttendanceResponse> listAttendaances(Pageable page) {
+    Page<Attendance> attendances = attendanceRepository.findAll(page);
+    return attendances.map(AttendanceResponse::fromEntity);
+  }
+
+  public AttendanceResponse findAttendance(Long id) {
+    Attendance attendance = findAttendanceById(id);
+    return AttendanceResponse.fromEntity(attendance);
+  }
+
+  public Attendance findAttendanceById(Long id) {
+    Attendance attendance = attendanceRepository.findById(id).orElseThrow(
+      ()-> new RuntimeException("No such entity")
+    );
+    return attendance;
+  }
+
+}
