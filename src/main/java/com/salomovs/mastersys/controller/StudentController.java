@@ -19,6 +19,7 @@ import com.salomovs.mastersys.dto.response.AttendanceResponse;
 import com.salomovs.mastersys.dto.response.StudentResponse;
 import com.salomovs.mastersys.service.StudentService;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -30,7 +31,7 @@ public class StudentController {
 
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
-  public StudentResponse registerStudent(@RequestBody StudentRequest req) {
+  public StudentResponse registerStudent(@RequestBody @Valid StudentRequest req) {
     StudentResponse newStudent = studentsService.registerStudent(req);
     return newStudent;
   }
@@ -49,7 +50,7 @@ public class StudentController {
 
   @PatchMapping("/{id}")
   @ResponseStatus(HttpStatus.OK)
-  public void updateStudentRegistry(@PathVariable Long id, @RequestBody StudentRequest req) {
+  public void updateStudentRegistry(@PathVariable Long id, @RequestBody @Valid StudentRequest req) {
     studentsService.updateStudent(id, req);
   }
 
@@ -63,7 +64,7 @@ public class StudentController {
 
   @PostMapping("/{registration_id}/attendances")
   @ResponseStatus(HttpStatus.CREATED)
-  public AttendanceResponse createAttendance(@PathVariable(name="registration_id") Long registrationId, @RequestBody AttendanceRequest body) {
+  public AttendanceResponse createAttendance(@PathVariable(name="registration_id") Long registrationId, @RequestBody @Valid AttendanceRequest body) {
     AttendanceResponse attendance = studentsService.saveAttendance(registrationId, body);
     return attendance;
   }
@@ -84,7 +85,7 @@ public class StudentController {
 
   @PatchMapping("/attendances/{attendance_id}")
   @ResponseStatus(HttpStatus.OK)
-  public void updateAttendance(@PathVariable(name="attendance_id") Long attendanceId, @RequestBody AttendanceRequest body) {
+  public void updateAttendance(@PathVariable(name="attendance_id") Long attendanceId, @RequestBody @Valid AttendanceRequest body) {
     studentsService.updateAttendance(attendanceId, body);
   }
 
