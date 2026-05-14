@@ -84,4 +84,10 @@ public class StudentService {
     return attendance;
   }
 
+  public void updateAttendance(Long attendanceId, AttendanceRequest patch) {
+    Attendance attendance = findAttendanceById(attendanceId);
+    patch.fillUp(attendance);
+    attendanceRepository.save(attendance);
+  }
+
 }
