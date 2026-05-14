@@ -6,14 +6,8 @@ import com.salomovs.mastersys.domain.Plan;
 import com.salomovs.mastersys.domain.Registration;
 import com.salomovs.mastersys.domain.RegistrationModality;
 import com.salomovs.mastersys.domain.Student;
-import com.salomovs.mastersys.dto.request.GraduationRequest;
-import com.salomovs.mastersys.dto.request.ModalityRequest;
-import com.salomovs.mastersys.dto.request.PlanRequest;
 import com.salomovs.mastersys.dto.request.RegistrationModalityRequest;
 import com.salomovs.mastersys.dto.request.RegistrationRequest;
-import com.salomovs.mastersys.dto.response.GraduationResponse;
-import com.salomovs.mastersys.dto.response.ModalityResponse;
-import com.salomovs.mastersys.dto.response.PlanResponse;
 import com.salomovs.mastersys.dto.response.RegistrationModalityResponse;
 import com.salomovs.mastersys.dto.response.RegistrationResponse;
 import com.salomovs.mastersys.repository.GraduationRepository;
@@ -31,73 +25,13 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class MembershipService {
+public class RegistrationService {
   private final GraduationRepository graduationRepository;
   private final ModalityRepository modalityRepository;
   private final PlanRepository plansRepository;
   private final StudentRepository studentsRepository;
   private final RegistrationRepository regsRepository;
-  private RegistrationModalityRepository regModalityRepo;
-
-  public ModalityResponse createModality(ModalityRequest req) {
-    Modality modality = modalityRepository.save(req.toEntity());
-    return ModalityResponse.fromEntity(modality);
-  }
-
-  public Page<ModalityResponse> listModalities(Pageable page) {
-    Page<Modality> modalities = modalityRepository.findAll(page);
-    return modalities.map(ModalityResponse::fromEntity);
-  }
-
-  public ModalityResponse findModality(Long id) {
-    Modality modality = findModalityById(id);
-    return ModalityResponse.fromEntity(modality);
-  }
-
-  private Modality findModalityById(Long modalityId) {
-    Modality modality = modalityRepository.findById(modalityId).orElseThrow(
-      ()-> new RuntimeException("No Such entity")
-    );
-    return modality;
-  }
-
-  public void updateModality(Long id, ModalityRequest patch) {
-    Modality modality = findModalityById(id);
-    patch.fillUp(modality);
-    modalityRepository.save(modality);
-  }
-
-
-
-  public PlanResponse createPlan(Long modalityId, PlanRequest req) {
-    Modality modality = findModalityById(modalityId);
-    Plan plan = plansRepository.save(req.toEntity(modality));
-    return PlanResponse.fromEntity(plan);
-  }
-
-  public Page<PlanResponse> listPlans(Pageable page) {
-    Page<Plan> plans = plansRepository.findAll(page);
-    return plans.map(PlanResponse::fromEntity);
-  }
-
-  public PlanResponse findPlan(Long planId) {
-    Plan plan = findPlanById(planId);
-    return PlanResponse.fromEntity(plan);
-  }
-
-  private Plan findPlanById(Long id) {
-    return plansRepository.findById(id).orElseThrow(
-      ()-> new RuntimeException("No Such entity")
-    );
-  }
-
-  public void updatePlan(Long id, PlanRequest patch) {
-    Plan plan = findPlanById(id);
-    patch.fillUp(plan);
-    plansRepository.save(plan);
-  }
-
-
+  private final RegistrationModalityRepository regModalityRepo;
 
   public RegistrationResponse createRegistration(Long studentId, RegistrationRequest req) {
     Student student = studentsRepository.findById(studentId).orElseThrow(
@@ -132,45 +66,14 @@ public class MembershipService {
 
 
 
-  public GraduationResponse createGraduation(Long modalityId, GraduationRequest req) {
-    Modality modality = findModalityById(modalityId);
-    Graduation graduation = graduationRepository.save(req.toEntity(modality));
-    return GraduationResponse.fronEntity(graduation);
-  }
-
-  public Page<GraduationResponse> listGraduations(Pageable page) {
-    Page<Graduation> graduations = graduationRepository.findAll(page);
-    return graduations.map(GraduationResponse::fronEntity);
-  }
-
-  public GraduationResponse findGraduation(Long id) {
-    Graduation graduation = findGraduationById(id);
-    return GraduationResponse.fronEntity(graduation);
-  }
-
-  private Graduation findGraduationById(Long id) {
-    Graduation graduation = graduationRepository.findById(id).orElseThrow(
-      ()-> new RuntimeException("No such entity")
-    );
-    return graduation;
-  }
-
-  public void updateGraduation(Long id, GraduationRequest patch) {
-    Graduation graduation = findGraduationById(id);
-    patch.fillUp(graduation);
-    graduationRepository.save(graduation);
-  }
-
-
-
   public RegistrationModalityResponse saveRegistrationModality(
     Long planId, Long registrationId, Long modalityId, Long graduationId,
     RegistrationModalityRequest req
   ) {
-    Plan plan = findPlanById(planId);
+    Plan plan = plansRepository.findById(planId).orElseThrow();
     Registration registration = findRegistrationById(registrationId);
-    Modality modality = findModalityById(modalityId);
-    Graduation graduation = findGraduationById(graduationId);
+    Modality modality = modalityRepository.findById(modalityId).orElseThrow();
+    Graduation graduation = graduationRepository.findById(graduationId).orElseThrow();
     RegistrationModality regModality = regModalityRepo.save(req.toEntity(plan, registration, modality, graduation));
     return RegistrationModalityResponse.fromEntity(regModality);
   }
