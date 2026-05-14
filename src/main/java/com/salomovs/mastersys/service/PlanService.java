@@ -4,6 +4,7 @@ import com.salomovs.mastersys.domain.Modality;
 import com.salomovs.mastersys.domain.Plan;
 import com.salomovs.mastersys.dto.request.PlanRequest;
 import com.salomovs.mastersys.dto.response.PlanResponse;
+import com.salomovs.mastersys.exception.BusinessInvariantViolationException;
 import com.salomovs.mastersys.repository.ModalityRepository;
 import com.salomovs.mastersys.repository.PlanRepository;
 
@@ -21,7 +22,7 @@ public class PlanService {
 
   public PlanResponse createPlan(Long modalityId, PlanRequest req) {
     Modality modality = modalityRepository.findById(modalityId).orElseThrow(
-      ()-> new RuntimeException("No such modality")
+      ()-> new BusinessInvariantViolationException("No Such modality")
     );
     Plan plan = plansRepository.save(req.toEntity(modality));
     return PlanResponse.fromEntity(plan);
@@ -39,7 +40,7 @@ public class PlanService {
 
   private Plan findPlanById(Long id) {
     return plansRepository.findById(id).orElseThrow(
-      ()-> new RuntimeException("No Such entity")
+      ()-> new BusinessInvariantViolationException("No Such Plan")
     );
   }
 

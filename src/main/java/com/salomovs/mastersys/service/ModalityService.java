@@ -6,6 +6,7 @@ import com.salomovs.mastersys.dto.request.GraduationRequest;
 import com.salomovs.mastersys.dto.request.ModalityRequest;
 import com.salomovs.mastersys.dto.response.GraduationResponse;
 import com.salomovs.mastersys.dto.response.ModalityResponse;
+import com.salomovs.mastersys.exception.BusinessInvariantViolationException;
 import com.salomovs.mastersys.repository.GraduationRepository;
 import com.salomovs.mastersys.repository.ModalityRepository;
 
@@ -38,7 +39,7 @@ public class ModalityService {
 
   private Modality findModalityById(Long modalityId) {
     Modality modality = modalityRepository.findById(modalityId).orElseThrow(
-      ()-> new RuntimeException("No Such entity")
+      ()-> new BusinessInvariantViolationException("No Modality Record Found")
     );
     return modality;
   }
@@ -69,7 +70,7 @@ public class ModalityService {
 
   private Graduation findGraduationById(Long id) {
     Graduation graduation = graduationRepository.findById(id).orElseThrow(
-      ()-> new RuntimeException("No such entity")
+      ()-> new BusinessInvariantViolationException("No Graduation Record Found")
     );
     return graduation;
   }

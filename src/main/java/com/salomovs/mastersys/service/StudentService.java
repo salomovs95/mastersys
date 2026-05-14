@@ -11,6 +11,7 @@ import com.salomovs.mastersys.dto.request.AttendanceRequest;
 import com.salomovs.mastersys.dto.request.StudentRequest;
 import com.salomovs.mastersys.dto.response.AttendanceResponse;
 import com.salomovs.mastersys.dto.response.StudentResponse;
+import com.salomovs.mastersys.exception.BusinessInvariantViolationException;
 import com.salomovs.mastersys.repository.AttendanceRepository;
 import com.salomovs.mastersys.repository.RegistrationRepository;
 import com.salomovs.mastersys.repository.StudentRepository;
@@ -51,8 +52,9 @@ public class StudentService {
   }
 
   private Student findById(Long id) {
-    Student student = studentsRepo.findById(id).orElseThrow(()->
-      new RuntimeException("Data not found"));
+    Student student = studentsRepo.findById(id).orElseThrow(
+      ()-> new BusinessInvariantViolationException("No Student Record Found")
+    );
 
     return student;
   }
@@ -61,7 +63,7 @@ public class StudentService {
 
   public AttendanceResponse saveAttendance(Long registrationId, AttendanceRequest req) {
     Registration registration = registrationRepo.findById(registrationId).orElseThrow(
-      ()-> new RuntimeException("No such entity")
+      ()-> new BusinessInvariantViolationException("No Registration Record Found")
     );
     Attendance attendance = attendanceRepository.save(req.toEntity(registration));
     return AttendanceResponse.fromEntity(attendance);
@@ -77,9 +79,9 @@ public class StudentService {
     return AttendanceResponse.fromEntity(attendance);
   }
 
-  public Attendance findAttendanceById(Long id) {
+  private Attendance findAttendanceById(Long id) {
     Attendance attendance = attendanceRepository.findById(id).orElseThrow(
-      ()-> new RuntimeException("No such entity")
+      ()-> new BusinessInvariantViolationException("No Attendance Record Found")
     );
     return attendance;
   }

@@ -10,6 +10,7 @@ import com.salomovs.mastersys.dto.request.RegistrationModalityRequest;
 import com.salomovs.mastersys.dto.request.RegistrationRequest;
 import com.salomovs.mastersys.dto.response.RegistrationModalityResponse;
 import com.salomovs.mastersys.dto.response.RegistrationResponse;
+import com.salomovs.mastersys.exception.BusinessInvariantViolationException;
 import com.salomovs.mastersys.repository.GraduationRepository;
 import com.salomovs.mastersys.repository.ModalityRepository;
 import com.salomovs.mastersys.repository.PlanRepository;
@@ -35,7 +36,7 @@ public class RegistrationService {
 
   public RegistrationResponse createRegistration(Long studentId, RegistrationRequest req) {
     Student student = studentsRepository.findById(studentId).orElseThrow(
-      ()-> new RuntimeException("No Such entity")
+      ()-> new BusinessInvariantViolationException("No Student Record Found")
     );
     Registration registration = req.toEntity(student);
     return RegistrationResponse.fromEntity(registration);
@@ -53,7 +54,7 @@ public class RegistrationService {
 
   private Registration findRegistrationById(Long id) {
     Registration registration = regsRepository.findById(id).orElseThrow(
-      ()-> new RuntimeException("No sucu entity")
+      ()-> new BusinessInvariantViolationException("No Registration Record Found")
     );
     return registration;
   }
@@ -70,10 +71,16 @@ public class RegistrationService {
     Long planId, Long registrationId, Long modalityId, Long graduationId,
     RegistrationModalityRequest req
   ) {
-    Plan plan = plansRepository.findById(planId).orElseThrow();
+    Plan plan = plansRepository.findById(planId).orElseThrow(
+      ()-> new BusinessInvariantViolationException("No Plan Record Found")
+    );
     Registration registration = findRegistrationById(registrationId);
-    Modality modality = modalityRepository.findById(modalityId).orElseThrow();
-    Graduation graduation = graduationRepository.findById(graduationId).orElseThrow();
+    Modality modality = modalityRepository.findById(modalityId).orElseThrow(
+      ()-> new BusinessInvariantViolationException("No Modality Record Found")
+    );
+    Graduation graduation = graduationRepository.findById(graduationId).orElseThrow(
+      ()-> new BusinessInvariantViolationException("No Gtraduation Record Found")
+    );
     RegistrationModality regModality = regModalityRepo.save(req.toEntity(plan, registration, modality, graduation));
     return RegistrationModalityResponse.fromEntity(regModality);
   }
@@ -90,7 +97,7 @@ public class RegistrationService {
 
   private RegistrationModality findRegistrationModalityById(Long regId) {
     RegistrationModality reg = regModalityRepo.findById(regId).orElseThrow(
-      ()-> new RuntimeException("No such entity")
+      ()-> new BusinessInvariantViolationException("No Registratiom Modality Record Found")
     );
     return reg;
   }

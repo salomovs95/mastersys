@@ -4,6 +4,7 @@ import com.salomovs.mastersys.domain.Registration;
 import com.salomovs.mastersys.domain.RegistrationInvoice;
 import com.salomovs.mastersys.dto.request.RegistrationInvoiceRequest;
 import com.salomovs.mastersys.dto.response.RegistrationInvoiceResponse;
+import com.salomovs.mastersys.exception.BusinessInvariantViolationException;
 import com.salomovs.mastersys.repository.InvoiceRepository;
 import com.salomovs.mastersys.repository.RegistrationRepository;
 
@@ -20,7 +21,9 @@ public class InvoiceService {
   private final RegistrationRepository registrationRepository;
 
   public RegistrationInvoiceResponse generateInvoice(Long registrationId, RegistrationInvoiceRequest req) {
-    Registration registration = registrationRepository.findById(registrationId).orElseThrow();
+    Registration registration = registrationRepository.findById(registrationId).orElseThrow(
+      ()-> new BusinessInvariantViolationException("Registration Record Not Found")
+    );
     RegistrationInvoice invoice = invoiceRepository.save(req.toEntity(registration));
     return RegistrationInvoiceResponse.fromEntity(invoice);
   }
@@ -36,7 +39,9 @@ public class InvoiceService {
   }
 
   private RegistrationInvoice findInvoiceById(Long id) {
-    RegistrationInvoice invoice = invoiceRepository.findById(id).orElseThrow();
+    RegistrationInvoice invoice = invoiceRepository.findById(id).orElseThrow(
+      ()-> new BusinessInvariantViolationException("No Invoice Record Found")
+    );
     return invoice;
   }
 
