@@ -4,13 +4,15 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import jakarta.persistence.AttributeOverride;
+import jakarta.persistence.AttributeOverrides;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
@@ -39,8 +41,16 @@ public class Student {
   private LocalDateTime registeredAt;
   private LocalDateTime updatedAt;
 
-  @OneToOne
-  @JoinColumn(name="address_id")
+  @Embedded
+  @AttributeOverrides({
+    @AttributeOverride(name="address", column=@Column(name="address_street")),
+    @AttributeOverride(name="number", column=@Column(name="address_number")),
+    @AttributeOverride(name="neighborhood", column=@Column(name="address_neighborhood")),
+    @AttributeOverride(name="complement", column=@Column(name="address_complement")),
+    @AttributeOverride(name="city", column=@Column(name="address_city")),
+    @AttributeOverride(name="federalUnity", column=@Column(name="address_state")),
+    @AttributeOverride(name="zipCode", column=@Column(name="address_zip_code"))
+  })
   private Address address;
 
   @OneToMany(mappedBy="student")

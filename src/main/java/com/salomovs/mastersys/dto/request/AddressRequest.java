@@ -12,7 +12,7 @@ public record AddressRequest (
 
   @NotBlank(message="Number field is missing")
   @Size(max=4, message="Number field can contain 4 characters at most")
-  Integer number,
+  String number,
 
   @NotBlank(message="Neighborhood field is missing")
   @Size(max=100, message="Neighborhood field can contain 100 characters at most")

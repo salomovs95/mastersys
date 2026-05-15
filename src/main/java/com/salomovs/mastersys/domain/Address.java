@@ -1,12 +1,7 @@
 package com.salomovs.mastersys.domain;
 
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.Embeddable;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,23 +10,15 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@Entity
-@Table(name="addresses")
+@Embeddable
 @AllArgsConstructor
 @NoArgsConstructor
 public class Address {
-  @Id
-  @GeneratedValue(strategy=GenerationType.IDENTITY)
-  Long id;
-
   private String address;
-  private Integer number;
+  private String number;
   private String neighborhood;
   private String complement;
-
   private String city;
-
-  @Column(name="fed_unity")
   private String federalUnity;
   private String zipCode;
 }

@@ -3,20 +3,15 @@ CREATE TABLE students (
     name VARCHAR(150) NOT NULL,
     birthdate DATE NOT NULL,
     gender VARCHAR(1) CHECK (gender IN ('F', 'M')),
+    address_street VARCHAR(150),
+    address_number VARCHAR(5),
+    address_complement VARCHAR(100),
+    address_neighborhood VARCHAR(20),
+    address_city VARCHAR(20),
+    address_state VARCHAR(2),
+    address_zip_code VARCHAR(20),
     registered_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP
-);
-
-CREATE TABLE addresses (
-    id BIGSERIAL PRIMARY KEY,
-    address VARCHAR(150),
-    number INT,
-    complement VARCHAR(100),
-    neighborhood VARCHAR(20),
-    city VARCHAR(20),
-    fed_unity VARCHAR(20),
-    zip_code VARCHAR(20),
-    student_id BIGSERIAL NOT NULL REFERENCES students(id)
 );
 
 CREATE TABLE contacts (
