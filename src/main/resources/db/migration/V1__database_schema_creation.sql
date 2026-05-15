@@ -3,6 +3,9 @@ CREATE TABLE students (
     name VARCHAR(150) NOT NULL,
     birthdate DATE NOT NULL,
     gender VARCHAR(1) CHECK (gender IN ('F', 'M')),
+    email VARCHAR(100) NOT NULL UNIQUE,
+    main_contact_number VARCHAR(20) NOT NULL,
+    spare_contact_number VARCHAR(20) NOT NULL,
     address_street VARCHAR(150),
     address_number VARCHAR(5),
     address_complement VARCHAR(100),
@@ -12,14 +15,6 @@ CREATE TABLE students (
     address_zip_code VARCHAR(20),
     registered_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP
-);
-
-CREATE TABLE contacts (
-    id BIGSERIAL PRIMARY KEY,
-    ctype VARCHAR(8) NOT NULL,
-    cvalue VARCHAR(150),
-    student_id BIGSERIAL NOT NULL REFERENCES students(id),
-    CHECK (ctype IN ('PHONE', 'CELLPHONE', 'EMAIL'))
 );
 
 CREATE TABLE modalities (

@@ -2,7 +2,6 @@ package com.salomovs.mastersys.domain;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.AttributeOverrides;
@@ -12,7 +11,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
@@ -43,6 +41,14 @@ public class Student {
 
   @Embedded
   @AttributeOverrides({
+    @AttributeOverride(name="email", column=@Column(name="email")),
+    @AttributeOverride(name="mainPhoneNumber", column=@Column(name="main_contact_number")),
+    @AttributeOverride(name="secondNumber", column=@Column(name="spare_contact_number"))
+  })
+  private Contact contact;
+
+  @Embedded
+  @AttributeOverrides({
     @AttributeOverride(name="address", column=@Column(name="address_street")),
     @AttributeOverride(name="number", column=@Column(name="address_number")),
     @AttributeOverride(name="neighborhood", column=@Column(name="address_neighborhood")),
@@ -52,9 +58,6 @@ public class Student {
     @AttributeOverride(name="zipCode", column=@Column(name="address_zip_code"))
   })
   private Address address;
-
-  @OneToMany(mappedBy="student")
-  private List<Contact> contacts;
 
   @PrePersist
   private void prePersist() {

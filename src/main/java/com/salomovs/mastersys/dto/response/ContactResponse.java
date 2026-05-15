@@ -3,11 +3,11 @@ package com.salomovs.mastersys.dto.response;
 import com.salomovs.mastersys.domain.Contact;
 
 public record ContactResponse (
-  Long id,
-  String type,
-  String value
+  String email,
+  String mainPhoneNumber,
+  String secondPhoneNumber
 ) {
   public static ContactResponse fromEntity(Contact c) {
-    return new ContactResponse(c.getId(), c.getType(), c.getValue());
+    return new ContactResponse(c.getEmail(), c.getMainPhoneNumber(), c.getSecondNumber());
   }
 }

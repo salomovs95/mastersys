@@ -6,8 +6,6 @@ import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Size;
 
 import java.time.LocalDate;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import com.salomovs.mastersys.domain.Student;
 
@@ -28,7 +26,7 @@ public record StudentRequest (
   @Size(max=1, message="Gender field can contain 1 character at most")
   String gender,
 
-  List<ContactRequest> contacts,
+  ContactRequest contact,
 
   @NotNull(message="Address field iss missing")
   AddressRequest address
@@ -55,10 +53,7 @@ public record StudentRequest (
     if (address != null)
       student.setAddress(address.toEntity());
 
-    if (contacts != null) student.setContacts(contacts
-      .stream()
-      .map((ContactRequest c)->c.toEntity(student))
-      .collect(Collectors.toList())
-    );
+    if (contact != null)
+        student.setContact(contact.toEntity());
   }
 }
