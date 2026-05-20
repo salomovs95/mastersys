@@ -65,7 +65,7 @@ public class PlanController {
 
   @GetMapping("/{modality_id}/plans")
   @ResponseStatus(HttpStatus.OK)
-  public Page<PlanResponse> listPlans(Pageable page) {
+  public Page<PlanResponse> listPlans(@PathVariable(name="modality_id") Long modalityId, Pageable page) {
     return planService.listPlans(page);
   }
 
@@ -77,33 +77,33 @@ public class PlanController {
 
   @PatchMapping("/{modality_id}/plans/{plan_id}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  public void updatePlan(@PathVariable(name="plan_id") Long planId, @RequestBody PlanRequest body) {
+  public void updatePlan(@PathVariable(name="modality_id") Long modalityId, @PathVariable(name="plan_id") Long planId, @RequestBody PlanRequest body) {
     planService.updatePlan(planId, body);
   }
 
 
 
-  @PostMapping("/{modality_id/graduations}")
+  @PostMapping("/{modality_id}/graduations")
   @ResponseStatus(HttpStatus.CREATED)
-  public GraduationResponse insertGraduation(@PathVariable Long modalityId, @RequestBody @Valid GraduationRequest body) {
+  public GraduationResponse insertGraduation(@PathVariable(name="modality_id") Long modalityId, @RequestBody @Valid GraduationRequest body) {
     return planService.createGraduation(modalityId, body);
   }
 
   @GetMapping("/{modality_id}/graduations")
   @ResponseStatus(HttpStatus.OK)
-  public Page<GraduationResponse> listGraduations(Pageable page) {
+  public Page<GraduationResponse> listGraduations(@PathVariable(name="modality_id") Long modalityId, Pageable page) {
     return planService.listGraduations(page);
   }
 
   @GetMapping("/{modality_id}/graduations/{graduation_id}")
   @ResponseStatus(HttpStatus.OK)
-  public GraduationResponse findGraduation(@PathVariable(name="graduation_id") Long graduationId) {
+  public GraduationResponse findGraduation(@PathVariable(name="modality_id") Long modalityId, @PathVariable(name="graduation_id") Long graduationId) {
     return planService.findGraduation(graduationId);
   }
 
   @PatchMapping("/{modality_id}/graduations/{graduation_id}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  public void updateGraduation(Long graduationId, @RequestBody GraduationRequest body) {
+  public void updateGraduation(@PathVariable(name="modality_id") Long modalityId, @PathVariable(name="graduation_id") Long graduationId, @RequestBody GraduationRequest body) {
     planService.updateGraduation(graduationId, body);
   }
 
