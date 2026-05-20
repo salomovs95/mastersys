@@ -1,7 +1,8 @@
 package com.salomovs.mastersys.service;
 
+import java.time.LocalDate;
+
 import com.salomovs.mastersys.domain.Graduation;
-import com.salomovs.mastersys.domain.Modality;
 import com.salomovs.mastersys.domain.Plan;
 import com.salomovs.mastersys.domain.Registration;
 import com.salomovs.mastersys.domain.RegistrationModality;
@@ -9,10 +10,8 @@ import com.salomovs.mastersys.domain.Student;
 import com.salomovs.mastersys.dto.request.RegistrationModalityRequest;
 import com.salomovs.mastersys.dto.request.RegistrationRequest;
 import com.salomovs.mastersys.dto.response.RegistrationModalityResponse;
-import com.salomovs.mastersys.dto.response.RegistrationResponse;
 import com.salomovs.mastersys.exception.BusinessInvariantViolationException;
 import com.salomovs.mastersys.repository.GraduationRepository;
-import com.salomovs.mastersys.repository.ModalityRepository;
 import com.salomovs.mastersys.repository.PlanRepository;
 import com.salomovs.mastersys.repository.RegistrationModalityRepository;
 import com.salomovs.mastersys.repository.RegistrationRepository;
@@ -28,61 +27,24 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class RegistrationService {
   private final GraduationRepository graduationRepository;
-  private final ModalityRepository modalityRepository;
   private final PlanRepository plansRepository;
   private final StudentRepository studentsRepository;
   private final RegistrationRepository regsRepository;
   private final RegistrationModalityRepository regModalityRepo;
 
-  public RegistrationResponse createRegistration(Long studentId, RegistrationRequest req) {
-    Student student = studentsRepository.findById(studentId).orElseThrow(
-      ()-> new BusinessInvariantViolationException("No Student Record Found")
-    );
-    Registration registration = req.toEntity(student);
-    return RegistrationResponse.fromEntity(registration);
-  }
-
-  public Page<RegistrationResponse> listRegistrations(Pageable page) {
-    Page<Registration> registrations = regsRepository.findAll(page);
-    return registrations.map(RegistrationResponse::fromEntity);
-  }
-
-  public RegistrationResponse findRegistration(Long id) {
-    Registration registration = findRegistrationById(id);
-    return RegistrationResponse.fromEntity(registration);
-  }
-
-  private Registration findRegistrationById(Long id) {
-    Registration registration = regsRepository.findById(id).orElseThrow(
-      ()-> new BusinessInvariantViolationException("No Registration Record Found")
-    );
-    return registration;
-  }
-
-  public void updateRegistration(Long id, RegistrationRequest patch) {
-    Registration registration = findRegistrationById(id);
-    patch.fillUp(registration);
-    regsRepository.save(registration);
-  }
-
-
-
-  public RegistrationModalityResponse saveRegistrationModality(
-    Long planId, Long registrationId, Long modalityId, Long graduationId,
-    RegistrationModalityRequest req
-  ) {
+  public void createRegistration(Long studentId, Long planId, Long graduationId, RegistrationRequest req) {
     Plan plan = plansRepository.findById(planId).orElseThrow(
       ()-> new BusinessInvariantViolationException("No Plan Record Found")
     );
-    Registration registration = findRegistrationById(registrationId);
-    Modality modality = modalityRepository.findById(modalityId).orElseThrow(
-      ()-> new BusinessInvariantViolationException("No Modality Record Found")
+    Student student = studentsRepository.findById(studentId).orElseThrow(
+      ()-> new BusinessInvariantViolationException("No Student Record Found")
     );
     Graduation graduation = graduationRepository.findById(graduationId).orElseThrow(
-      ()-> new BusinessInvariantViolationException("No Gtraduation Record Found")
+      ()-> new BusinessInvariantViolationException("No Graduation Record Found")
     );
-    RegistrationModality regModality = regModalityRepo.save(req.toEntity(plan, registration, modality, graduation));
-    return RegistrationModalityResponse.fromEntity(regModality);
+
+    Registration registration = regsRepository.save(req.toEntity(student));
+    regModalityRepo.save(req.registrationModality().toEntity(plan, registration, plan.getModality(), graduation));
   }
 
   public Page<RegistrationModalityResponse> listRegistrationModalities(Pageable page) {
@@ -100,6 +62,19 @@ public class RegistrationService {
       ()-> new BusinessInvariantViolationException("No Registratiom Modality Record Found")
     );
     return reg;
+  }
+
+  private Registration findRegistrationById(Long id) {
+    Registration registration = regsRepository.findById(id).orElseThrow(
+      ()-> new BusinessInvariantViolationException("No Registration Record Found")
+    );
+    return registration;
+  }
+
+  public void updateRegistration(Long id, RegistrationRequest patch) {
+    Registration registration = findRegistrationById(id);
+    patch.fillUp(registration);
+    regsRepository.save(registration);
   }
 
   public void updateModalityRegistration(Long id, RegistrationModalityRequest patch) {

@@ -17,7 +17,9 @@ public record RegistrationRequest (
   @Min(value=1, message="DueDay field must be between 1 and 31")
   @Max(value=31, message="DueDay field must be between 1 and 31")
   @NotNull(message="DueDay field is missinf")
-  Integer dueDay
+  Integer dueDay,
+
+  RegistrationModalityRequest registrationModality
 ) {
   public Registration toEntity(Student student) {
     Registration registration = new Registration();
