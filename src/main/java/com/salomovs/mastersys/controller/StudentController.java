@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.salomovs.mastersys.dto.filter.StudentFilter;
 import com.salomovs.mastersys.dto.request.AttendanceRequest;
 import com.salomovs.mastersys.dto.request.StudentRequest;
 import com.salomovs.mastersys.dto.response.AttendanceResponse;
@@ -44,8 +45,8 @@ public class StudentController {
 
   @GetMapping
   @ResponseStatus(HttpStatus.OK)
-  public Page<StudentResponse> listStudents(Pageable page) {
-    return studentsService.listStudents(page);
+  public Page<StudentResponse> listStudents(StudentFilter filter, Pageable page) {
+    return studentsService.listStudents(filter, page);
   }
 
   @PatchMapping("/{id}")

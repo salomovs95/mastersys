@@ -2,11 +2,13 @@ package com.salomovs.mastersys.service;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.salomovs.mastersys.domain.Attendance;
 import com.salomovs.mastersys.domain.Registration;
 import com.salomovs.mastersys.domain.Student;
+import com.salomovs.mastersys.dto.filter.StudentFilter;
 import com.salomovs.mastersys.dto.request.AttendanceRequest;
 import com.salomovs.mastersys.dto.request.StudentRequest;
 import com.salomovs.mastersys.dto.response.AttendanceResponse;
@@ -15,6 +17,7 @@ import com.salomovs.mastersys.exception.BusinessInvariantViolationException;
 import com.salomovs.mastersys.repository.AttendanceRepository;
 import com.salomovs.mastersys.repository.RegistrationRepository;
 import com.salomovs.mastersys.repository.StudentRepository;
+import com.salomovs.mastersys.specification.StudentSpecification;
 
 import lombok.RequiredArgsConstructor;
 
@@ -37,8 +40,9 @@ public class StudentService {
     studentsRepo.save(student);
   }
 
-  public Page<StudentResponse> listStudents(Pageable page) {
-    Page<Student> students = studentsRepo.findAll(page);
+  public Page<StudentResponse> listStudents(StudentFilter filter, Pageable page) {
+    Specification<Student> spec = StudentSpecification.withFilter(filter);
+    Page<Student> students = studentsRepo.findAll(spec, page);
     return students.map(StudentResponse::fromEntity);
   }
 
