@@ -1,7 +1,5 @@
 package com.salomovs.mastersys.service;
 
-import java.time.LocalDate;
-
 import com.salomovs.mastersys.domain.Graduation;
 import com.salomovs.mastersys.domain.Plan;
 import com.salomovs.mastersys.domain.Registration;
@@ -71,8 +69,8 @@ public class RegistrationService {
     return registration;
   }
 
-  public void updateRegistration(Long id, RegistrationRequest patch) {
-    Registration registration = findRegistrationById(id);
+  public void updateRegistration(Long regId, RegistrationRequest patch) {
+    Registration registration = findRegistrationById(regId);
     patch.fillUp(registration);
     regsRepository.save(registration);
   }
