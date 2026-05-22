@@ -1,4 +1,4 @@
-package com.salomovs.mastersys.controllerUnitaryTests;
+package com.salomovs.mastersys.controller;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.http.MediaType;
@@ -18,7 +19,6 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.salomovs.mastersys.service.StudentService;
-import com.salomovs.mastersys.controller.StudentController;
 import com.salomovs.mastersys.dto.request.StudentRequest;
 import com.salomovs.mastersys.dto.response.StudentResponse;
 
