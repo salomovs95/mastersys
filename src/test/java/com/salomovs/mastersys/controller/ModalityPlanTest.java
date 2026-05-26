@@ -1,6 +1,7 @@
 package com.salomovs.mastersys.controller;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.mockito.Mockito.when;
 
@@ -9,9 +10,11 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.springframework.test.web.servlet.MockMvc;
 
 import com.salomovs.mastersys.config.Bean;
 import com.salomovs.mastersys.domain.Graduation;
@@ -23,6 +26,9 @@ import com.salomovs.mastersys.repository.PlanRepository;
 
 @WebMvcTest({PlanController.class, Bean.class})
 public class ModalityPlanTest {
+
+  @Autowired
+  MockMvc mvc;
 
   @MockitoBean
   public GraduationRepository graduationRepo;
@@ -40,10 +46,11 @@ public class ModalityPlanTest {
       .thenReturn(m);
 
     String payload = "{\"name\":\"Nane Modality\",\"active\": true}";
-    assertDoesNotThrow(()->
-      post("/modalities")
+    assertDoesNotThrow(()->{
+      mvc.perform(post("/modalities")
         .contentType(MediaType.APPLICATION_JSON)
         .content(payload));
+    });
   }
 
   @Test
@@ -59,9 +66,9 @@ public class ModalityPlanTest {
 
     String payload = "{\"name\":\"Modality Plan\",\"monthlyPrice\": 55.89, \"active\":true}";
     assertDoesNotThrow(()->{
-      post("/modalities/999/plans")
+      mvc.perform(post("/modalities/999/plans")
         .contentType(MediaType.APPLICATION_JSON)
-        .content(payload);
+        .content(payload));
     });
   }
 
@@ -78,9 +85,20 @@ public class ModalityPlanTest {
 
     String payload = "{\"name\":\"Modality Graduation\"}";
     assertDoesNotThrow(()->{
-      post("/modalities/999/graduations")
+      mvc.perform(post("/modalities/999/graduations")
         .contentType(MediaType.APPLICATION_JSON)
-        .content(payload);
+        .content(payload));
+    });
+  }
+
+  @Test
+  void retrievePlan() {
+    Modality m = new Modality(999l, "Name Modality", true);
+    when(modalityRepo.findById(Mockito.any(Long.class)))
+      .thenReturn(Optional.of(m));
+
+    assertDoesNotThrow(()->{
+      mvc.perform(get("/modalities/999"));
     });
   }
 
