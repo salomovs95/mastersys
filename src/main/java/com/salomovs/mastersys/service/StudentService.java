@@ -19,9 +19,12 @@ import com.salomovs.mastersys.repository.RegistrationRepository;
 import com.salomovs.mastersys.repository.StudentRepository;
 import com.salomovs.mastersys.specification.StudentSpecification;
 
+import jakarta.transaction.Transactional;
+
 import lombok.RequiredArgsConstructor;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class StudentService {
 

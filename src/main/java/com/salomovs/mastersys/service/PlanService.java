@@ -14,6 +14,8 @@ import com.salomovs.mastersys.repository.GraduationRepository;
 import com.salomovs.mastersys.repository.ModalityRepository;
 import com.salomovs.mastersys.repository.PlanRepository;
 
+import jakarta.transaction.Transactional;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -21,6 +23,7 @@ import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class PlanService {
   private final GraduationRepository graduationRepository;
