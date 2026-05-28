@@ -11,7 +11,26 @@
 
 	<groupId>com.salomovs</groupId>
 	<artifactId>mastersys</artifactId>
-	<version>0.0.1-alpha</version>
+	<version>0.0.1-a</version>
+	<url>https://github.com/salomovs95/mastersys</url>
+
+	<licenses>
+		<license>
+	    <name>MIT</name>
+  	  <url>https://github.com/salomovs95/mastersys?tab=MIT-1-ov-file</url>
+    </license>
+  </licenses>
+
+	<developers>
+		<developer>
+	    <id>salomovs95</id>
+    	<name>Salomao Souza</name>
+  	  <email>TBD</email>
+	    <properties>
+    	  <picUrl>https://github.com/salomovs95.png</picUrl>
+  	  </properties>
+	  </developer>
+  </developers>
 
 	<properties>
 		<java.version>25</java.version>
