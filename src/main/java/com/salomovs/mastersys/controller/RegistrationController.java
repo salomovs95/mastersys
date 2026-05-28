@@ -53,8 +53,8 @@ public class RegistrationController {
   }
 
   @GetMapping("/modalities/{registration_modality_id}")
-  public RegistrationModalityResponse f8ndRegistry(Long regId) {
-    return registrationService.fundRegistrationModality(regId);
+  public RegistrationModalityResponse findRegistry(Long regId) {
+    return registrationService.findRegistrationModality(regId);
   }
 
 }

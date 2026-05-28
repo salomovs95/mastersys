@@ -53,7 +53,7 @@ public class RegistrationService {
     return regies.map(RegistrationModalityResponse::fromEntity);
   }
 
-  public RegistrationModalityResponse fundRegistrationModality(Long regId) {
+  public RegistrationModalityResponse findRegistrationModality(Long regId) {
     RegistrationModality reg = findRegistrationModalityById(regId);
     return RegistrationModalityResponse.fromEntity(reg);
   }
