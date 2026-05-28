@@ -1,8 +1,19 @@
 spring:
   application:
-    name: MasterSYS
+    name: "@project.artifactId@"
   profiles:
     active: dev
 
   jpa:
     open-in-view: false
+
+project:
+  dev:
+    name: "@project.developers[0].name@"
+    email: "@project.developers[0].email@"
+  repository:
+    url: "@project.url@"
+  license:
+    name: "@project.licenses[0].name@"
+    url: "@project.licenses[0].url@"
+  version: "@project.version@"
