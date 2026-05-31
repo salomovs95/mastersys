@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.salomovs.mastersys.doc.IReportsController;
 import com.salomovs.mastersys.dto.projection.MonthlyIncomes;
 import com.salomovs.mastersys.dto.projection.PendingInvoice;
 import com.salomovs.mastersys.dto.projection.StudentPerCity;
@@ -18,7 +19,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/reports")
 @RequiredArgsConstructor
-public class ReportsController {
+public class ReportsController implements IReportsController {
 
   private final ReportRepository reportRepository;
 

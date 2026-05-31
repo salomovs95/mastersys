@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.salomovs.mastersys.doc.IGraduationController;
+import com.salomovs.mastersys.doc.IModalityController;
+import com.salomovs.mastersys.doc.IPlanController;
 import com.salomovs.mastersys.dto.request.GraduationRequest;
 import com.salomovs.mastersys.dto.request.ModalityRequest;
 import com.salomovs.mastersys.dto.request.PlanRequest;
@@ -27,7 +30,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/modalities")
 @RequiredArgsConstructor
-public class PlanController {
+public class PlanController implements IPlanController, IModalityController, IGraduationController {
 
   private final PlanService planService;
 
@@ -55,8 +58,6 @@ public class PlanController {
     planService.updateModality(modalityId, body);
   }
 
-
-
   @PostMapping("/{modality_id}/plans")
   @ResponseStatus(HttpStatus.CREATED)
   public PlanResponse createPlan(@PathVariable(name="modality_id") Long modalityId, @RequestBody @Valid PlanRequest body) {
@@ -80,8 +81,6 @@ public class PlanController {
   public void updatePlan(@PathVariable(name="modality_id") Long modalityId, @PathVariable(name="plan_id") Long planId, @RequestBody PlanRequest body) {
     planService.updatePlan(planId, body);
   }
-
-
 
   @PostMapping("/{modality_id}/graduations")
   @ResponseStatus(HttpStatus.CREATED)

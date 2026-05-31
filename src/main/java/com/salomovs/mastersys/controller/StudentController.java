@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.salomovs.mastersys.doc.IAttendanceController;
+import com.salomovs.mastersys.doc.IStudentController;
 import com.salomovs.mastersys.dto.filter.StudentFilter;
 import com.salomovs.mastersys.dto.request.AttendanceRequest;
 import com.salomovs.mastersys.dto.request.StudentRequest;
@@ -26,7 +28,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/students")
 @RequiredArgsConstructor
-public class StudentController {
+public class StudentController implements IStudentController, IAttendanceController {
 
   private final StudentService studentsService;
 
@@ -37,9 +39,9 @@ public class StudentController {
     return newStudent;
   }
 
-  @GetMapping("/{id}")
+  @GetMapping("/{student_id}")
   @ResponseStatus(HttpStatus.OK)
-  public StudentResponse findStudent(@PathVariable Long id) {
+  public StudentResponse findStudent(@PathVariable(name="student_id") Long id) {
     return studentsService.findStudent(id);
   }
 
@@ -49,19 +51,17 @@ public class StudentController {
     return studentsService.listStudents(filter, page);
   }
 
-  @PatchMapping("/{id}")
-  @ResponseStatus(HttpStatus.OK)
-  public void updateStudentRegistry(@PathVariable Long id, @RequestBody @Valid StudentRequest req) {
+  @PatchMapping("/{student_id}")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  public void updateStudentRegistry(@PathVariable(name="student_id") Long id, @RequestBody @Valid StudentRequest req) {
     studentsService.updateStudent(id, req);
   }
 
-  @DeleteMapping("/{id}")
-  @ResponseStatus(HttpStatus.OK)
-  public void deleteStudent(Long id) {
+  @DeleteMapping("/{student_id}")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  public void deleteStudent(@PathVariable(name="student_id") Long id) {
     studentsService.removeStudent(id);
   }
-
-
 
   @PostMapping("/{registration_id}/attendances")
   @ResponseStatus(HttpStatus.CREATED)
@@ -85,7 +85,7 @@ public class StudentController {
   }
 
   @PatchMapping("/attendances/{attendance_id}")
-  @ResponseStatus(HttpStatus.OK)
+  @ResponseStatus(HttpStatus.NO_CONTENT)
   public void updateAttendance(@PathVariable(name="attendance_id") Long attendanceId, @RequestBody @Valid AttendanceRequest body) {
     studentsService.updateAttendance(attendanceId, body);
   }
