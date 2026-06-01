@@ -2,7 +2,7 @@ spring:
   application:
     name: "@project.artifactId@"
   profiles:
-    active: dev
+    active: ${PROFILE:dev}
 
   jpa:
     open-in-view: false
